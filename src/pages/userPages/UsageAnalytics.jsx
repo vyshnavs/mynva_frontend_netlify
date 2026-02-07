@@ -17,7 +17,9 @@ import {
   MapPin,
   AlertTriangle,
   Info,
-  Package
+  Package,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import api from "../../api/connection";
 import {
@@ -49,6 +51,7 @@ export default function AnalyticsPage() {
   const [metric, setMetric] = useState("energy");
   const [timeRange, setTimeRange] = useState("7d");
   const [expandedUnits, setExpandedUnits] = useState({});
+  const [showFilters, setShowFilters] = useState(false);
 
   const intervals = [
     { value: "10min", label: "10 Min" },
@@ -171,12 +174,12 @@ export default function AnalyticsPage() {
 
     const commonProps = {
       data: chartData,
-      margin: { top: 10, right: 30, left: 0, bottom: 0 }
+      margin: { top: 10, right: 10, left: -20, bottom: 0 }
     };
 
     const axisProps = {
       stroke: "#6b7280",
-      style: { fontSize: "12px" }
+      style: { fontSize: "10px" }
     };
 
     switch (chartType) {
@@ -197,7 +200,8 @@ export default function AnalyticsPage() {
                 backgroundColor: "#1f2937",
                 border: "none",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                fontSize: "12px"
               }}
             />
             <Area
@@ -220,7 +224,8 @@ export default function AnalyticsPage() {
                 backgroundColor: "#1f2937",
                 border: "none",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                fontSize: "12px"
               }}
             />
             <Line type="monotone" dataKey="value" stroke={color} strokeWidth={2} dot={false} />
@@ -237,7 +242,8 @@ export default function AnalyticsPage() {
                 backgroundColor: "#1f2937",
                 border: "none",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                fontSize: "12px"
               }}
             />
             <Bar dataKey="value" fill={color} radius={[4, 4, 0, 0]} />
@@ -249,12 +255,12 @@ export default function AnalyticsPage() {
   const renderMainChart = () => {
     const commonProps = {
       data: chartData,
-      margin: { top: 10, right: 30, left: 0, bottom: 0 }
+      margin: { top: 10, right: 10, left: -20, bottom: 0 }
     };
 
     const axisProps = {
       stroke: "#6b7280",
-      style: { fontSize: "12px" }
+      style: { fontSize: "10px" }
     };
 
     switch (chartType) {
@@ -275,7 +281,8 @@ export default function AnalyticsPage() {
                 backgroundColor: "#1f2937",
                 border: "none",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                fontSize: "12px"
               }}
             />
             <Area
@@ -298,7 +305,8 @@ export default function AnalyticsPage() {
                 backgroundColor: "#1f2937",
                 border: "none",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                fontSize: "12px"
               }}
             />
             <Line
@@ -321,7 +329,8 @@ export default function AnalyticsPage() {
                 backgroundColor: "#1f2937",
                 border: "none",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                fontSize: "12px"
               }}
             />
             <Bar dataKey={currentMetric.key} fill={currentMetric.color} radius={[4, 4, 0, 0]} />
@@ -339,99 +348,115 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 sm:py-6 md:py-8 px-3 sm:px-4">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Usage Analytics</h1>
+        <div className="mb-4 sm:mb-6 md:mb-8">
+          <div className="flex items-center justify-between gap-2">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Analytics</h1>
             <button
               onClick={loadAnalytics}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm sm:text-base"
             >
-              <RefreshCw className="w-4 h-4" />
-              Refresh
+              <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Refresh</span>
             </button>
           </div>
         </div>
 
         {/* Summary Cards */}
         {summary && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between mb-3">
-                <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
-                  <Zap className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
+                <div className="p-1.5 sm:p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
+                  <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 {comparison && (
-                  <span className={`text-xs font-semibold flex items-center gap-1 ${
+                  <span className={`text-xs font-semibold flex items-center gap-0.5 ${
                     comparison.change.energy >= 0 
                       ? 'text-red-600 dark:text-red-400' 
                       : 'text-green-600 dark:text-green-400'
                   }`}>
-                    {comparison.change.energy >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                    {comparison.change.energy >= 0 ? <ArrowUpRight className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> : <ArrowDownRight className="w-2.5 h-2.5 sm:w-3 sm:h-3" />}
                     {Math.abs(comparison.change.energy).toFixed(1)}%
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Energy</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{summary.totalEnergy} kWh</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-0.5 sm:mb-1">Total Energy</p>
+              <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{summary.totalEnergy} <span className="text-xs sm:text-sm font-normal">kWh</span></p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between mb-3">
-                <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
-                  <DollarSign className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+            <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
+                <div className="p-1.5 sm:p-2 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
+                  <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 dark:text-amber-400" />
                 </div>
                 {comparison && (
-                  <span className={`text-xs font-semibold flex items-center gap-1 ${
+                  <span className={`text-xs font-semibold flex items-center gap-0.5 ${
                     comparison.change.cost >= 0 
                       ? 'text-red-600 dark:text-red-400' 
                       : 'text-green-600 dark:text-green-400'
                   }`}>
-                    {comparison.change.cost >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                    {comparison.change.cost >= 0 ? <ArrowUpRight className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> : <ArrowDownRight className="w-2.5 h-2.5 sm:w-3 sm:h-3" />}
                     {Math.abs(comparison.change.cost).toFixed(1)}%
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Cost</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{summary.totalCost}</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-0.5 sm:mb-1">Total Cost</p>
+              <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">₹{summary.totalCost}</p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between mb-3">
-                <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg">
-                  <Activity className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+            <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
+                <div className="p-1.5 sm:p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg">
+                  <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
                 </div>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Peak Power</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{summary.peakPower} W</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-0.5 sm:mb-1">Peak Power</p>
+              <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{summary.peakPower} <span className="text-xs sm:text-sm font-normal">W</span></p>
               {summary.peakPowerTime && (
-                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                  {new Date(summary.peakPowerTime).toLocaleString('en-IN')}
+                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 truncate">
+                  {new Date(summary.peakPowerTime).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit' })}
                 </p>
               )}
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between mb-3">
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                  <Gauge className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
+                <div className="p-1.5 sm:p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                  <Gauge className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Avg Cost/Unit</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{summary.avgCostPerUnit}</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-0.5 sm:mb-1">Avg Cost/Unit</p>
+              <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">₹{summary.avgCostPerUnit}</p>
             </div>
           </div>
         )}
 
-        {/* Controls */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 border border-gray-200 dark:border-gray-700">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Controls - Mobile Collapsible */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 border border-gray-200 dark:border-gray-700">
+          
+          {/* Mobile: Collapsible Header */}
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="md:hidden flex items-center justify-between w-full mb-3 text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            <span className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              Filters & Options
+            </span>
+            {showFilters ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+
+          {/* Controls Grid */}
+          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 ${showFilters ? 'block' : 'hidden md:grid'}`}>
+            
+            {/* Time Range */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 Time Range
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -439,7 +464,7 @@ export default function AnalyticsPage() {
                   <button
                     key={range.value}
                     onClick={() => setTimeRange(range.value)}
-                    className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    className={`px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
                       timeRange === range.value
                         ? 'bg-indigo-600 text-white'
                         : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
@@ -451,15 +476,16 @@ export default function AnalyticsPage() {
               </div>
             </div>
 
+            {/* Interval */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                <Clock className="w-4 h-4" />
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 Interval
               </label>
               <select
                 value={interval}
                 onChange={(e) => setInterval(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 {intervals.map(int => (
                   <option key={int.value} value={int.value}>{int.label}</option>
@@ -467,15 +493,16 @@ export default function AnalyticsPage() {
               </select>
             </div>
 
+            {/* Metric */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                <BarChart3 className="w-4 h-4" />
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 Metric
               </label>
               <select
                 value={metric}
                 onChange={(e) => setMetric(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 {Object.entries(metricConfig).map(([key, config]) => (
                   <option key={key} value={key}>{config.label}</option>
@@ -483,8 +510,9 @@ export default function AnalyticsPage() {
               </select>
             </div>
 
+            {/* Chart Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Chart Type
               </label>
               <div className="flex gap-2">
@@ -492,7 +520,7 @@ export default function AnalyticsPage() {
                   <button
                     key={type}
                     onClick={() => setChartType(type)}
-                    className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-colors capitalize ${
+                    className={`flex-1 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors capitalize ${
                       chartType === type
                         ? 'bg-indigo-600 text-white'
                         : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
@@ -507,36 +535,42 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Main Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              <currentMetric.icon className="w-5 h-5" style={{ color: currentMetric.color }} />
-              {currentMetric.label}
+        <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 border border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2">
+            <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <currentMetric.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: currentMetric.color }} />
+              <span className="text-sm sm:text-base md:text-xl">{currentMetric.label}</span>
             </h2>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              {summary?.dataPoints} data points
+            <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+              {summary?.dataPoints} points
             </span>
           </div>
           
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width="100%" height={250} className="sm:hidden">
+            {renderMainChart()}
+          </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height={350} className="hidden sm:block md:hidden">
+            {renderMainChart()}
+          </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height={400} className="hidden md:block">
             {renderMainChart()}
           </ResponsiveContainer>
         </div>
 
         {/* Per-Unit Analytics */}
         {unitAnalytics.length > 0 && (
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Unit-wise Analytics</h2>
+          <div className="mb-4 sm:mb-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">Unit-wise Analytics</h2>
             
             {unitAnalytics.map(unit => (
-              <div key={unit.unitId} className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-4 border border-gray-200 dark:border-gray-700">
+              <div key={unit.unitId} className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 mb-3 sm:mb-4 border border-gray-200 dark:border-gray-700">
                 
                 {/* Unit Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">{unit.name}</h3>
-                      <span className={`px-2 py-1 text-xs rounded-full ${
+                <div className="flex flex-col sm:flex-row items-start justify-between mb-3 sm:mb-4 gap-3">
+                  <div className="flex-1 w-full sm:w-auto">
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-white">{unit.name}</h3>
+                      <span className={`px-2 py-0.5 text-xs rounded-full ${
                         unit.status.healthStatus === 'good' 
                           ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                           : unit.status.healthStatus === 'warning'
@@ -545,7 +579,7 @@ export default function AnalyticsPage() {
                       }`}>
                         {unit.status.healthStatus}
                       </span>
-                      <span className={`px-2 py-1 text-xs rounded-full ${
+                      <span className={`px-2 py-0.5 text-xs rounded-full ${
                         unit.status.isOnline
                           ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                           : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
@@ -554,10 +588,10 @@ export default function AnalyticsPage() {
                       </span>
                     </div>
                     {unit.description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{unit.description}</p>
+                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1 sm:mb-2">{unit.description}</p>
                     )}
                     {unit.location && (
-                      <p className="text-sm text-gray-500 dark:text-gray-500 flex items-center gap-1">
+                      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-500 flex items-center gap-1">
                         <MapPin className="w-3 h-3" />
                         {unit.location}
                       </p>
@@ -565,37 +599,37 @@ export default function AnalyticsPage() {
                   </div>
                   <button
                     onClick={() => toggleUnit(unit.unitId)}
-                    className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                    className="w-full sm:w-auto px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap"
                   >
                     {expandedUnits[unit.unitId] ? 'Hide Details' : 'Show Details'}
                   </button>
                 </div>
 
                 {/* Summary Stats Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Total Energy</p>
-                    <p className="text-lg font-bold text-gray-900 dark:text-white">{unit.summary.totalEnergy} kWh</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 sm:p-3">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-0.5 sm:mb-1">Total Energy</p>
+                    <p className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-white truncate">{unit.summary.totalEnergy} kWh</p>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Avg Power</p>
-                    <p className="text-lg font-bold text-gray-900 dark:text-white">{unit.summary.avgPower} W</p>
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 sm:p-3">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-0.5 sm:mb-1">Avg Power</p>
+                    <p className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-white truncate">{unit.summary.avgPower} W</p>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Peak Power</p>
-                    <p className="text-lg font-bold text-indigo-600 dark:text-indigo-400">{unit.summary.peakPower} W</p>
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 sm:p-3">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-0.5 sm:mb-1">Peak Power</p>
+                    <p className="text-sm sm:text-base md:text-lg font-bold text-indigo-600 dark:text-indigo-400 truncate">{unit.summary.peakPower} W</p>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Peak Current</p>
-                    <p className="text-lg font-bold text-orange-600 dark:text-orange-400">{unit.summary.peakCurrent} A</p>
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 sm:p-3">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-0.5 sm:mb-1">Peak Current</p>
+                    <p className="text-sm sm:text-base md:text-lg font-bold text-orange-600 dark:text-orange-400 truncate">{unit.summary.peakCurrent} A</p>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Avg Voltage</p>
-                    <p className="text-lg font-bold text-gray-900 dark:text-white">{unit.summary.avgVoltage} V</p>
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 sm:p-3">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-0.5 sm:mb-1">Avg Voltage</p>
+                    <p className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-white truncate">{unit.summary.avgVoltage} V</p>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Avg PF</p>
-                    <p className="text-lg font-bold text-gray-900 dark:text-white">{unit.summary.avgPowerFactor}</p>
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 sm:p-3">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-0.5 sm:mb-1">Avg PF</p>
+                    <p className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-white truncate">{unit.summary.avgPowerFactor}</p>
                   </div>
                 </div>
 
@@ -603,44 +637,44 @@ export default function AnalyticsPage() {
                 {expandedUnits[unit.unitId] && (
                   <>
                     {/* Thresholds */}
-                    <div className="mb-6">
-                      <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                        <AlertTriangle className="w-4 h-4 text-yellow-600" />
+                    <div className="mb-4 sm:mb-6">
+                      <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3 flex items-center gap-2">
+                        <AlertTriangle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-600" />
                         Configured Thresholds
                       </h4>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-2 sm:p-3">
                           <p className="text-xs text-gray-600 dark:text-gray-400">Max Voltage</p>
-                          <p className="text-sm font-semibold text-gray-900 dark:text-white">{unit.thresholds.maxVoltage} V</p>
+                          <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">{unit.thresholds.maxVoltage} V</p>
                         </div>
-                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-2 sm:p-3">
                           <p className="text-xs text-gray-600 dark:text-gray-400">Min Voltage</p>
-                          <p className="text-sm font-semibold text-gray-900 dark:text-white">{unit.thresholds.minVoltage} V</p>
+                          <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">{unit.thresholds.minVoltage} V</p>
                         </div>
-                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-2 sm:p-3">
                           <p className="text-xs text-gray-600 dark:text-gray-400">Max Current</p>
-                          <p className="text-sm font-semibold text-gray-900 dark:text-white">{unit.thresholds.maxCurrent} A</p>
+                          <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">{unit.thresholds.maxCurrent} A</p>
                         </div>
-                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
-                          <p className="text-xs text-gray-600 dark:text-gray-400">Min Power Factor</p>
-                          <p className="text-sm font-semibold text-gray-900 dark:text-white">{unit.thresholds.minPowerFactor}</p>
+                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-2 sm:p-3">
+                          <p className="text-xs text-gray-600 dark:text-gray-400">Min PF</p>
+                          <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">{unit.thresholds.minPowerFactor}</p>
                         </div>
                       </div>
                     </div>
 
                     {/* Connected Gadgets */}
                     {unit.connectedGadgets.length > 0 && (
-                      <div className="mb-6">
-                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                          <Package className="w-4 h-4 text-blue-600" />
+                      <div className="mb-4 sm:mb-6">
+                        <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3 flex items-center gap-2">
+                          <Package className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
                           Connected Gadgets
                         </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                           {unit.connectedGadgets.map((gadget, idx) => (
-                            <div key={idx} className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
-                              <p className="text-sm font-semibold text-gray-900 dark:text-white">{gadget.name}</p>
+                            <div key={idx} className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-2 sm:p-3">
+                              <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white truncate">{gadget.name}</p>
                               <p className="text-xs text-gray-600 dark:text-gray-400">{gadget.category}</p>
-                              <div className="flex items-center justify-between mt-2">
+                              <div className="flex items-center justify-between mt-1 sm:mt-2">
                                 <span className="text-xs text-gray-600 dark:text-gray-400">Qty: {gadget.quantity}</span>
                                 <span className="text-xs text-gray-600 dark:text-gray-400">{gadget.ratedPower}W</span>
                               </div>
@@ -651,39 +685,54 @@ export default function AnalyticsPage() {
                     )}
 
                     {/* Usage Graphs */}
-                    <div className="space-y-6">
+                    <div className="space-y-4 sm:space-y-6">
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Power Consumption</h4>
-                        <ResponsiveContainer width="100%" height={250}>
+                        <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3">Power Consumption</h4>
+                        <ResponsiveContainer width="100%" height={200} className="sm:hidden">
+                          {renderChart(unit.timeSeries, 'power', '#6366f1')}
+                        </ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height={250} className="hidden sm:block">
                           {renderChart(unit.timeSeries, 'power', '#6366f1')}
                         </ResponsiveContainer>
                       </div>
 
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Energy Usage</h4>
-                        <ResponsiveContainer width="100%" height={250}>
+                        <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3">Energy Usage</h4>
+                        <ResponsiveContainer width="100%" height={200} className="sm:hidden">
+                          {renderChart(unit.timeSeries, 'energy', '#10b981')}
+                        </ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height={250} className="hidden sm:block">
                           {renderChart(unit.timeSeries, 'energy', '#10b981')}
                         </ResponsiveContainer>
                       </div>
 
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                         <div>
-                          <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Voltage</h4>
-                          <ResponsiveContainer width="100%" height={200}>
+                          <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3">Voltage</h4>
+                          <ResponsiveContainer width="100%" height={180} className="sm:hidden">
+                            {renderChart(unit.timeSeries, 'voltage', '#ec4899')}
+                          </ResponsiveContainer>
+                          <ResponsiveContainer width="100%" height={200} className="hidden sm:block">
                             {renderChart(unit.timeSeries, 'voltage', '#ec4899')}
                           </ResponsiveContainer>
                         </div>
                         <div>
-                          <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Current</h4>
-                          <ResponsiveContainer width="100%" height={200}>
+                          <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3">Current</h4>
+                          <ResponsiveContainer width="100%" height={180} className="sm:hidden">
+                            {renderChart(unit.timeSeries, 'current', '#f59e0b')}
+                          </ResponsiveContainer>
+                          <ResponsiveContainer width="100%" height={200} className="hidden sm:block">
                             {renderChart(unit.timeSeries, 'current', '#f59e0b')}
                           </ResponsiveContainer>
                         </div>
                       </div>
 
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Power Factor</h4>
-                        <ResponsiveContainer width="100%" height={200}>
+                        <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3">Power Factor</h4>
+                        <ResponsiveContainer width="100%" height={180} className="sm:hidden">
+                          {renderChart(unit.timeSeries, 'powerFactor', '#8b5cf6')}
+                        </ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height={200} className="hidden sm:block">
                           {renderChart(unit.timeSeries, 'powerFactor', '#8b5cf6')}
                         </ResponsiveContainer>
                       </div>
@@ -697,24 +746,35 @@ export default function AnalyticsPage() {
 
         {/* Hourly Pattern */}
         {hourlyPattern.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              24-Hour Usage Pattern
+          <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+            <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center gap-2">
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
+              <span className="text-sm sm:text-base md:text-xl">24-Hour Pattern</span>
             </h2>
             
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250} className="sm:hidden">
+              <BarChart data={hourlyChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis dataKey="hour" stroke="#6b7280" style={{ fontSize: "10px" }} />
+                <YAxis stroke="#6b7280" style={{ fontSize: "10px" }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1f2937",
+                    border: "none",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                    fontSize: "12px"
+                  }}
+                />
+                <Bar dataKey="energy" fill="#10b981" name="kWh" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+            
+            <ResponsiveContainer width="100%" height={300} className="hidden sm:block">
               <BarChart data={hourlyChartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis
-                  dataKey="hour"
-                  stroke="#6b7280"
-                  style={{ fontSize: "12px" }}
-                />
-                <YAxis
-                  stroke="#6b7280"
-                  style={{ fontSize: "12px" }}
-                />
+                <XAxis dataKey="hour" stroke="#6b7280" style={{ fontSize: "12px" }} />
+                <YAxis stroke="#6b7280" style={{ fontSize: "12px" }} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#1f2937",

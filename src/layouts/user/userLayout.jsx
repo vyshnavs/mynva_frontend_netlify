@@ -139,6 +139,18 @@ export default function UserLayout() {
     setSidebarOpen(false);
   }, []);
 
+  // Prevent body scroll when mobile sidebar is open
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [sidebarOpen]);
+
   return (
     <div
       className={`flex h-screen ${
@@ -181,17 +193,21 @@ export default function UserLayout() {
           devices={devices}
         />
 
-        <main className="mt-16 flex-1 overflow-auto transition-all duration-300">
-          <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto">
+        {/* Mobile: Reduced top margin, Desktop: Standard */}
+        <main className="mt-14 sm:mt-16 flex-1 overflow-auto transition-all duration-300">
+          {/* Mobile: Reduced padding, Desktop: Standard */}
+          <div className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto">
             <div
               className={`
-                rounded-2xl p-6 min-h-[calc(100vh-8rem)]
+                rounded-xl sm:rounded-2xl 
+                p-4 sm:p-5 md:p-6 
+                min-h-[calc(100vh-7rem)] sm:min-h-[calc(100vh-8rem)]
                 ${
                   isDark
                     ? "bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950"
                     : "bg-white"
                 }
-                shadow-xl
+                shadow-lg sm:shadow-xl
               `}
             >
               <Outlet context={{ devices, setDevices, devicesLoading }} />
@@ -210,8 +226,16 @@ export default function UserLayout() {
         }
 
         *::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
+          width: 6px;
+          height: 6px;
+        }
+
+        /* Mobile: Thinner scrollbar */
+        @media (max-width: 640px) {
+          *::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+          }
         }
 
         *::-webkit-scrollbar-track {
@@ -225,6 +249,13 @@ export default function UserLayout() {
 
         *::-webkit-scrollbar-thumb:hover {
           background: ${isDark ? "#4b5563" : "#9ca3af"};
+        }
+
+        /* Smooth scrolling on mobile */
+        @media (max-width: 768px) {
+          * {
+            -webkit-overflow-scrolling: touch;
+          }
         }
       `}</style>
     </div>
