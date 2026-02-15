@@ -16,6 +16,7 @@ import PrepaidSystem from "../../pages/userPages/PrepaidSystem";
 import AISuggestions from "../../pages/userPages/AISuggestions";
 import TelemetryLive from "../../pages/userPages/TelemetryLive";
 import FaultManagement from "../../pages/userPages/FaultManagement";
+import RelayControl from "../../pages/userPages/RelayControl";
 
 // Device Management Pages
 import AddDevicePage from "../../pages/userPages/AddDevicePage";
@@ -57,6 +58,7 @@ export default function UserRoutes() {
         <Route path="device/:deviceId/live-monitor" element={<TelemetryLive/>} />
         <Route path="device/:deviceId/prepaid" element={<PrepaidSystem />} />
         <Route path="device/:deviceId/faults" element={<FaultManagement />} />
+        <Route path="device/:deviceId/relay-control" element={<RelayControl />} />
         <Route path="device/:deviceId/ai" element={<AISuggestions />} />
       </Route>
     </>

@@ -44,6 +44,7 @@ export default function Sidebar({
     { name: "Live monitoring", path: "live-monitor", icon: CpuChipIcon },
     { name: "Prepaid System", path: "prepaid", icon: CreditCardIcon },
     { name: "AI Suggestions", path: "ai", icon: LightBulbIcon },
+    { name: "Relay Control", path: "relay-control", icon: CpuChipIcon },
     { name: "Fault Management", path: "faults", icon: HomeIcon },
   ];
 
